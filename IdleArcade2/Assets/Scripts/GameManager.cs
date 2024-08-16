@@ -123,10 +123,10 @@ public class GameManager : MonoBehaviour
             //npc.GetComponent<NPCController>().GoToBuyWeapon(pointNPC);
             //npc.GetComponent<NPCController>().actionSwitchStateOrder = () => { orderManager.RandomOrder(); };
 
-            //         if (orderManager.GetLevel() < 4 && coin >= coinForLevel)
-            //         {
-            //             upgrade.SetActive(true);
-            //         }
+            if (orderManager.GetLevel() < 4 && coin >= coinForLevel)
+            {
+                upgrade.SetActive(true);
+            }
 
             //npcList.Add(npc);
         }

@@ -138,33 +138,40 @@ public class NPCController : MonoBehaviour
 
                     Debug.Log("HEHE: " + npcManager.GetQueueIndex(this.pointNPC));
 
-                    if (agent.remainingDistance <= agent.stoppingDistance && transform.rotation.y != 0)
+                    //if (agent.remainingDistance <= agent.stoppingDistance && transform.rotation.y != 0)
+                    //{
+
+                    //    transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 0));
+
+                    //    //if (!checkWaiting)
+                    //    //{
+                    //    //    npcManager.npcQueues.Add(transform.gameObject);
+
+                    //    //    //if (npcManager.npcQueues.Count <= 4 && !checkSpawn)
+                    //    //    //{
+                    //    //    //    Debug.Log("Den noi SpawnNPC");
+                    //    //    //    npcManager.StartSpawnNPC();
+                    //    //    //    checkSpawn = true;
+                    //    //    //}
+                    //    //    //else
+                    //    //    //{
+                    //    //    //    //GoHome(npcManager.HomeTransform());
+                    //    //    //}
+                    //    //}
+
+                    //    Debug.Log("GetQueueIndex2: " + npcManager.GetQueueIndex(this.pointNPC));
+                    //    if (npcManager.GetQueueIndex(this.pointNPC) == 0)
+                    //    {
+                    //        Debug.Log("Dat hang ne 2");
+                    //        orderManager.RandomOrder();
+                    //    }
+                    //}
+
+                    Debug.Log("GetQueueIndex2: " + npcManager.GetQueueIndex(this.pointNPC));
+                    if (npcManager.GetQueueIndex(this.pointNPC) == 0)
                     {
-
-                        transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 0));
-
-                        //if (!checkWaiting)
-                        //{
-                        //    npcManager.npcQueues.Add(transform.gameObject);
-
-                        //    //if (npcManager.npcQueues.Count <= 4 && !checkSpawn)
-                        //    //{
-                        //    //    Debug.Log("Den noi SpawnNPC");
-                        //    //    npcManager.StartSpawnNPC();
-                        //    //    checkSpawn = true;
-                        //    //}
-                        //    //else
-                        //    //{
-                        //    //    //GoHome(npcManager.HomeTransform());
-                        //    //}
-                        //}
-
-                        Debug.Log("GetQueueIndex2: " + npcManager.GetQueueIndex(this.pointNPC));
-                        if (npcManager.GetQueueIndex(this.pointNPC) == 0)
-                        {
-                            Debug.Log("Dat hang ne 2");
-                            orderManager.RandomOrder();
-                        }
+                        Debug.Log("Dat hang ne 2");
+                        orderManager.RandomOrder();
                     }
 
                     SwitchStateNPC(StateNPC.Wait);
@@ -184,13 +191,17 @@ public class NPCController : MonoBehaviour
                 }
             case StateNPC.GoHome:
                 {
-                    if (npcManager.GetQueueIndex(pointNPC) == -1)
+                    if (agent.remainingDistance <= agent.stoppingDistance && transform.rotation.y != 0)
                     {
-                        Debug.Log("Go Home " + npcManager.GetQueueIndex(pointNPC));
-                        if (agent.remainingDistance <= agent.stoppingDistance)
+                        if (npcManager.GetQueueIndex(pointNPC) == -1)
                         {
-                            Destroy(this.gameObject);
+                            Debug.Log("Go Home " + npcManager.GetQueueIndex(pointNPC));
+                            if (agent.remainingDistance <= agent.stoppingDistance)
+                            {
+                                Destroy(this.gameObject);
+                            }
                         }
+                        Debug.Log("GoHome");
                     }
 
                     animator.SetBool("Run", true);
@@ -237,7 +248,7 @@ public class NPCController : MonoBehaviour
 
     public void GoHome(Transform homePoint)
     {
-        agent.SetDestination(homePoint.position);
+        GoToBuyWeapon(homePoint);
         //SwitchStateAnimationNPC(StateAnimationNPC.Going);
         SwitchStateNPC(StateNPC.GoHome);
     }
@@ -246,8 +257,8 @@ public class NPCController : MonoBehaviour
     {
         if (npcManager.npcQueues.IndexOf(transform.gameObject) != currentPoint)
         {
-            SwitchStateNPC(StateNPC.StepForward);
             GoToBuyWeapon(pointNPC);
+            SwitchStateNPC(StateNPC.StepForward);
         }
     }
 
