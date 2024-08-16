@@ -6,7 +6,7 @@ using UnityEngine;
 public enum StateHand
 {
     Nonee,
-	Sword1,
+    Sword1,
     Sword2,
     Sword3,
     Shield1
@@ -14,13 +14,15 @@ public enum StateHand
 
 public class GameManager : MonoBehaviour
 {
-	private StateHand handState;
+    public static GameManager Instance;
+
+    private StateHand handState;
     private OrderManager orderManager;
     private int coin = 0;
     private int coinForWeapon;
     private int coinForLevel;
 
-	[SerializeField] private Transform handTransform;
+    [SerializeField] private Transform handTransform;
     [SerializeField] private TextMeshProUGUI coinText;
 
     [Header("GameObject")]
@@ -30,14 +32,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject forge3;
     [SerializeField] private GameObject forge4;
     [SerializeField] private GameObject upgrade;
-
-    [Header("NPC Manager")]
-    [SerializeField] private Transform pointNPC;
-    [SerializeField] private GameObject npcPrefab;
-    [SerializeField] private Transform npcTransform;
-    [SerializeField] private List<GameObject> npcList;
-    //[SerializeField] public List<Transform> queueNPC;
-    //[SerializeField] public List<GameObject> checkQueueNPC;
 
     [Header("Resource")]
     [SerializeField] private GameObject ironPrefab;
@@ -50,19 +44,31 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Rescouce> listResource = new List<Rescouce>();
 
     private void Awake()
-	{
-		orderManager = GetComponentInChildren<OrderManager>();
-	}
+    {
+        orderManager = GetComponentInChildren<OrderManager>();
 
-	private void Start()
-	{
-		GameObject npc = Instantiate(npcPrefab, npcTransform);
-        npc.GetComponent<NPCController>().GoToBuyWeapon(pointNPC);
-        npc.GetComponent<NPCController>().actionSwitchStateOrder = () => { orderManager.SwitchStateOrder(StateOrder.Sword1); };
-        npcList.Add(npc);
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        //GameObject npc = Instantiate(npcPrefab, npcTransform);
+        //      npc.GetComponent<NPCController>().GoToBuyWeapon(pointNPC);
+        //      npc.GetComponent<NPCController>().actionSwitchStateOrder = () => { orderManager.SwitchStateOrder(StateOrder.Sword1); };
+        //npcList.Add(npc);
 
         coinForLevel = 60;
         orderManager.SetLevel();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log("F");
+            //GetComponentInChildren<NPCManager>().StartGoHomeNPC();
+            Selling();
+        }
     }
 
     public void StartTakeIron()
@@ -109,20 +115,21 @@ public class GameManager : MonoBehaviour
             coin += coinForWeapon;
             coinText.text = coin.ToString();
 
-            npcList[0].GetComponent<NPCController>().GoHome();
-            npcList.Remove(npcList[0]);
+            GetComponentInChildren<NPCManager>().StartGoHomeNPC();
+            //         npcList[0].GetComponent<NPCController>().GoHome();
+            //         npcList.Remove(npcList[0]);
 
-			GameObject npc = Instantiate(npcPrefab, npcTransform);
-			npc.GetComponent<NPCController>().GoToBuyWeapon(pointNPC);
-			npc.GetComponent<NPCController>().actionSwitchStateOrder = () => { orderManager.RandomOrder(); };
+            //GameObject npc = Instantiate(npcPrefab, npcTransform);
+            //npc.GetComponent<NPCController>().GoToBuyWeapon(pointNPC);
+            //npc.GetComponent<NPCController>().actionSwitchStateOrder = () => { orderManager.RandomOrder(); };
 
-            if (orderManager.GetLevel() < 4 && coin >= coinForLevel)
-            {
-                upgrade.SetActive(true);
-            }
+            //         if (orderManager.GetLevel() < 4 && coin >= coinForLevel)
+            //         {
+            //             upgrade.SetActive(true);
+            //         }
 
-			npcList.Add(npc);
-		}
+            //npcList.Add(npc);
+        }
     }
 
     private IEnumerator TakeIron()
@@ -132,7 +139,7 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(2f);
             var iron = Instantiate(ironPrefab, handTransform);
-            listResource.Add(new Rescouce() { Index = 1, Object = iron});
+            listResource.Add(new Rescouce() { Index = 1, Object = iron });
 
             if (listResource.Count > 1)
             {
@@ -199,7 +206,7 @@ public class GameManager : MonoBehaviour
                         break;
                     }
             }
-		}
+        }
     }
 
     private IEnumerator TrashCan()
@@ -216,14 +223,14 @@ public class GameManager : MonoBehaviour
         upgrade.SetActive(false);
         coin -= coinForLevel;
         coinText.text = coin.ToString();
-        
+
         orderManager.SetLevel();
 
         Debug.Log("Level: " + orderManager.GetLevel());
 
         switch (orderManager.GetLevel())
         {
-            case 2: 
+            case 2:
                 {
                     orderManager.SwitchStateOrder(StateOrder.Sword2);
                     coinForLevel = 120;
@@ -259,7 +266,7 @@ public class GameManager : MonoBehaviour
     private void ClearIron()
     {
         listResource.Clear();
-        foreach(Transform child in handTransform)
+        foreach (Transform child in handTransform)
         {
             Destroy(child.gameObject);
         }
@@ -273,7 +280,7 @@ public class GameManager : MonoBehaviour
         {
             case StateHand.Nonee:
                 {
-                    foreach(Transform child in handTransform)
+                    foreach (Transform child in handTransform)
                     {
                         Destroy(child.gameObject);
                     }
@@ -281,10 +288,10 @@ public class GameManager : MonoBehaviour
                 }
             case StateHand.Sword1:
                 {
-					ClearIron();
-					Instantiate(swordPrefab, handTransform);
+                    ClearIron();
+                    Instantiate(swordPrefab, handTransform);
                     coinForWeapon = 20;
-					break;
+                    break;
                 }
             case StateHand.Sword2:
                 {

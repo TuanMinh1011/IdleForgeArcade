@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +26,7 @@ public class OrderManager : MonoBehaviour
 	public void RandomOrder()
 	{
 		int random = Random.Range(0, level);
-		Debug.Log(random);
+		//Debug.Log(random);
 		if (random == 0)
 		{
 			SwitchStateOrder(StateOrder.Sword1);
