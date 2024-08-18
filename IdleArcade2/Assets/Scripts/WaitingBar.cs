@@ -1,18 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WaitingBar : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Slider slider;
+
+    private float count = 0;
+
+    private void Awake()
     {
-        
+        slider = GetComponent<Slider>();
+
+        this.gameObject.SetActive(false);
+
+        count = slider.value;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        count += Time.deltaTime;
+
+        if (count <= slider.maxValue)
+        {
+            slider.value = count;
+        }
+        //else
+        //{
+        //    count = 0;
+        //}
+    }
+
+    public void StartSliderWaiting(float maxValue)
+    {
+        this.count = 0;
+        slider.maxValue = maxValue;
     }
 }

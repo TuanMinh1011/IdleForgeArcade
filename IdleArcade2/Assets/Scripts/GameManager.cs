@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum StateHand
@@ -63,37 +64,37 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("F");
-            //GetComponentInChildren<NPCManager>().StartGoHomeNPC();
-            Selling();
-        }
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    Debug.Log("F");
+        //    //GetComponentInChildren<NPCManager>().StartGoHomeNPC();
+        //    Selling();
+        //}
     }
 
-    public void StartTakeIron()
+    public void StartTakeIron(WaitingBar waiting)
     {
-        StartCoroutine(TakeIron());
+        StartCoroutine(TakeIron(waiting));
     }
 
-    public void StartMakeSword()
+    public void StartMakeSword(WaitingBar waiting)
     {
-        StartCoroutine(MakeSword());
+        StartCoroutine(MakeSword(waiting));
     }
 
-    public void StartSelling()
+    public void StartSelling(WaitingBar waiting)
     {
-        StartCoroutine(Selling());
+        StartCoroutine(Selling(waiting));
     }
 
-    public void StartTakeWood()
+    public void StartTakeWood(WaitingBar waiting)
     {
-        StartCoroutine(TakeWood());
+        StartCoroutine(TakeWood(waiting));
     }
 
-    public void StartTrashCan()
+    public void StartTrashCan(WaitingBar waiting)
     {
-        StartCoroutine(TrashCan());
+        StartCoroutine(TrashCan(waiting));
     }
 
     public void StartUpgrade()
@@ -101,14 +102,17 @@ public class GameManager : MonoBehaviour
         StartCoroutine(Upgrade());
     }
 
-    private IEnumerator Selling()
+    private IEnumerator Selling(WaitingBar waiting)
     {
-        yield return new WaitForSeconds(1f);
-
-        Debug.Log("OrderState: " + orderManager.orderState.ToString());
-        Debug.Log("HandState: " + handState.ToString());
         if (orderManager.orderState.ToString() == handState.ToString())
         {
+            waiting.StartSliderWaiting(1f);
+
+            yield return new WaitForSeconds(1f);
+
+            Debug.Log("OrderState: " + orderManager.orderState.ToString());
+            Debug.Log("HandState: " + handState.ToString());
+
             orderManager.SwitchStateOrder(StateOrder.None);
             SwitchHandState(StateHand.Nonee);
 
@@ -132,11 +136,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TakeIron()
+    private IEnumerator TakeIron(WaitingBar waiting)
     {
         int i = listResource.Count;
         while (listResource.Count < 3 && handState == StateHand.Nonee)
         {
+
+            waiting.StartSliderWaiting(2f);
+
             yield return new WaitForSeconds(2f);
             var iron = Instantiate(ironPrefab, handTransform);
             listResource.Add(new Rescouce() { Index = 1, Object = iron });
@@ -152,11 +159,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TakeWood()
+    private IEnumerator TakeWood(WaitingBar waiting)
     {
         int i = listResource.Count;
         while (listResource.Count < 3 && handState == StateHand.Nonee)
         {
+
+            waiting.StartSliderWaiting(2f);
+
             yield return new WaitForSeconds(2f);
             var iron = Instantiate(woodPrefab, handTransform);
             listResource.Add(new Rescouce() { Index = 2, Object = iron });
@@ -172,12 +182,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator MakeSword()
+    private IEnumerator MakeSword(WaitingBar waiting)
     {
-        yield return new WaitForSeconds(2f);
-
         if (listResource.Count == 3)
         {
+            waiting.StartSliderWaiting(2f);
+
+            yield return new WaitForSeconds(2f);
+
+
             //SwitchHandState(StateHand.Sword);
             switch (CheckRescouceSword())
             {
@@ -209,11 +222,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TrashCan()
+    private IEnumerator TrashCan(WaitingBar waiting)
     {
-        yield return new WaitForSeconds(2f);
-        SwitchHandState(StateHand.Nonee);
-        ClearIron();
+        if (listResource.Count > 0 || handState != StateHand.Nonee)
+        {
+            waiting.StartSliderWaiting(2f);
+            yield return new WaitForSeconds(2f);
+            SwitchHandState(StateHand.Nonee);
+            ClearIron();
+        }
     }
 
     private IEnumerator Upgrade()
@@ -290,28 +307,28 @@ public class GameManager : MonoBehaviour
                 {
                     ClearIron();
                     Instantiate(swordPrefab, handTransform);
-                    coinForWeapon = 20;
+                    coinForWeapon = 30;
                     break;
                 }
             case StateHand.Sword2:
                 {
                     ClearIron();
                     Instantiate(swordPrefab2, handTransform);
-                    coinForWeapon = 30;
+                    coinForWeapon = 40;
                     break;
                 }
             case StateHand.Sword3:
                 {
                     ClearIron();
                     Instantiate(swordPrefab3, handTransform);
-                    coinForWeapon = 40;
+                    coinForWeapon = 50;
                     break;
                 }
             case StateHand.Shield1:
                 {
                     ClearIron();
                     Instantiate(shieldPrefab, handTransform);
-                    coinForWeapon = 50;
+                    coinForWeapon = 60;
                     break;
                 }
         }

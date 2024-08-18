@@ -89,7 +89,7 @@ public class NPCController : MonoBehaviour
                     // Check lại vị trí lúc đang chạy
                     if (npcManager.GetQueueIndex(pointNPC) != npcManager.npcQueues.Count)
                     {
-                        Debug.Log("currentPoint: " + npcManager.GetQueueIndex(pointNPC) + " " + npcManager.npcQueues.Count);
+                        //Debug.Log("currentPoint: " + npcManager.GetQueueIndex(pointNPC) + " " + npcManager.npcQueues.Count);
                         if (npcManager.GetQueuePoint(npcManager.npcQueues.Count) != null)
                         {
                             GoToBuyWeapon(npcManager.GetQueuePoint(npcManager.npcQueues.Count));
@@ -121,10 +121,10 @@ public class NPCController : MonoBehaviour
                             }
                         }
 
-                        Debug.Log("GetQueueIndex: " + npcManager.GetQueueIndex(this.pointNPC));
+                        //Debug.Log("GetQueueIndex: " + npcManager.GetQueueIndex(this.pointNPC));
                         if (npcManager.GetQueueIndex(this.pointNPC) == 0)
                         {
-                            Debug.Log("Dat hang ne");
+                            //Debug.Log("Dat hang ne");
                             orderManager.RandomOrder();
                         }
 
@@ -136,7 +136,7 @@ public class NPCController : MonoBehaviour
                 {
                     animator.SetBool("Run", true);
 
-                    Debug.Log("HEHE: " + npcManager.GetQueueIndex(this.pointNPC));
+                    //Debug.Log("HEHE: " + npcManager.GetQueueIndex(this.pointNPC));
 
                     //if (agent.remainingDistance <= agent.stoppingDistance && transform.rotation.y != 0)
                     //{
@@ -167,10 +167,10 @@ public class NPCController : MonoBehaviour
                     //    }
                     //}
 
-                    Debug.Log("GetQueueIndex2: " + npcManager.GetQueueIndex(this.pointNPC));
+                    //Debug.Log("GetQueueIndex2: " + npcManager.GetQueueIndex(this.pointNPC));
                     if (npcManager.GetQueueIndex(this.pointNPC) == 0)
                     {
-                        Debug.Log("Dat hang ne 2");
+                        //Debug.Log("Dat hang ne 2");
                         orderManager.RandomOrder();
                     }
 

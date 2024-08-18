@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -38,27 +39,72 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("ShopIron"))
         {
-            gameManager.StartTakeIron();
+            var w = other.gameObject.GetComponentInChildren<Canvas>();
+            if (w != null)
+            {
+                w.transform.GetChild(0).gameObject.SetActive(true);
+                WaitingBar waiting = other.gameObject.GetComponentInChildren<WaitingBar>();
+                if (waiting != null)
+                {
+                    gameManager.StartTakeIron(waiting);
+                }
+            }
         }
 
         if (other.gameObject.CompareTag("ShopWood"))
         {
-            gameManager.StartTakeWood();
+            var w = other.gameObject.GetComponentInChildren<Canvas>();
+            if (w != null)
+            {
+                w.transform.GetChild(0).gameObject.SetActive(true);
+                WaitingBar waiting = other.gameObject.GetComponentInChildren<WaitingBar>();
+                if (waiting != null)
+                {
+                    gameManager.StartTakeWood(waiting);
+                }
+            }
         }
 
         if (other.gameObject.CompareTag("ForgeSword"))
         {
-            gameManager.StartMakeSword();
+            var w = other.gameObject.GetComponentInChildren<Canvas>();
+            if (w != null)
+            {
+                w.transform.GetChild(0).gameObject.SetActive(true);
+                WaitingBar waiting = other.gameObject.GetComponentInChildren<WaitingBar>();
+                if (waiting != null)
+                {
+                    gameManager.StartMakeSword(waiting);
+                }
+            }
         }
 
         if (other.gameObject.CompareTag("Selling"))
         {
-            gameManager.StartSelling();
-		}
+            var w = other.gameObject.GetComponentInChildren<Canvas>();
+            if (w != null)
+            {
+                w.transform.GetChild(0).gameObject.SetActive(true);
+                WaitingBar waiting = other.gameObject.GetComponentInChildren<WaitingBar>();
+                if (waiting != null)
+                {
+                    gameManager.StartSelling(waiting);
+                }
+            }
+        }
 
         if (other.gameObject.CompareTag("TrashCan"))
         {
-            gameManager.StartTrashCan();
+            var w = other.gameObject.GetComponentInChildren<Canvas>();
+            if (w != null)
+            {
+                w.transform.GetChild(0).gameObject.SetActive(true);
+                WaitingBar waiting = other.gameObject.GetComponentInChildren<WaitingBar>();
+                if (waiting != null)
+                {
+                    gameManager.StartTrashCan(waiting);
+                }
+            }
         }
 
         if (other.gameObject.CompareTag("Upgrade"))
@@ -70,6 +116,11 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Debug.Log("Exit");
+
+        var w = other.gameObject.GetComponentInChildren<Canvas>();
+        if (w != null)
+        { w.transform.GetChild(0).gameObject.SetActive(false); }
+
         gameManager.StopAllCoroutines();
     }
 }
